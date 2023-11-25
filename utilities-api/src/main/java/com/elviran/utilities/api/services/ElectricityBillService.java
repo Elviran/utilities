@@ -5,7 +5,10 @@ import com.elviran.utilities.api.documents.ElectricityBill;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,18 +19,21 @@ import static com.elviran.utilities.api.utils.DateUtils.startOfYear;
 @Service
 public class ElectricityBillService {
 
-    ElectricityBillRepository electricityBillRepository;
+    private final ElectricityBillRepository electricityBillRepository;
+    private final SequenceGeneratorService sequenceGeneratorService;
 
     @Autowired
-    public ElectricityBillService(ElectricityBillRepository repository) {
+    public ElectricityBillService(ElectricityBillRepository repository, SequenceGeneratorService sequenceGeneratorService) {
         this.electricityBillRepository = repository;
+        this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
     public ElectricityBill create(ElectricityBill bill) {
+        bill.setId(sequenceGeneratorService.generateSequence(ElectricityBill.SEQUENCE_NAME));
         return electricityBillRepository.save(bill);
     }
 
-    public ElectricityBill fetchBill(Integer id) {
+    public ElectricityBill fetchBill(Long id) {
         Optional<ElectricityBill> bill = electricityBillRepository.findById(id);
         return bill.orElse(null);
     }
@@ -37,17 +43,13 @@ public class ElectricityBillService {
     }
 
     public List<ElectricityBill> fetchBillsByDateBetween(LocalDate from, LocalDate to) {
-        return electricityBillRepository.findElectricityBillByDateAddedBetween(from.toString(), to.toString());
-    }
-
-    public List<ElectricityBill> fetchBillsByDateBetween(String from, String to) {
         return electricityBillRepository.findElectricityBillByDateAddedBetween(from, to);
     }
 
+
     public List<ElectricityBill> fetchAllBillsFromYear(Integer year) {
-        // get year, start from first january till end of december
-        String start = startOfYear(year);
-        String end = endOfYear(year);
+        LocalDate start = LocalDate.from(startOfYear(year).toInstant());
+        LocalDate end = LocalDate.from(endOfYear(year).toInstant());
         return fetchBillsByDateBetween(start, end);
     }
 

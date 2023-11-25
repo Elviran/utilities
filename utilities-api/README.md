@@ -1,0 +1,2 @@
+# Guide to run utilities-api locally with a docker compose file for mongodb
+- 1. Make sure that docker-compose version installed is version 2.X as 1.X is not supported anymore. Follow this url for guidance https://docs.docker.com/compose/install/linux/

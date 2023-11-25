@@ -27,27 +27,27 @@ public class ElectricityBillController {
     }
 
     //add caching here before calling controller or before method.
-    @GetMapping(value = "/get", consumes = {"application/json"})
+    @GetMapping(value = "/get")
     public ResponseEntity<?> fetchAllElectricityBills() {
         List<ElectricityBill> bills = electricityBillService.fetchAllBills();
         return ResponseEntity.ok(bills);
     }
 
-    @GetMapping(value = "/get/{id}", consumes = {"application/json"})
-    public ResponseEntity<?> getElectricityBill(@PathVariable Integer id) {
+    @GetMapping(value = "/get/{id}")
+    public ResponseEntity<?> getElectricityBill(@PathVariable Long id) {
         ElectricityBill bills = electricityBillService.fetchBill(id);
         return ResponseEntity.ok(bills);
     }
 
-    @GetMapping(value = "/get/{year}", consumes = {"application/json"})
+    @GetMapping(value = "/get/all/{year}")
     public ResponseEntity<?> getElectricityBillsByYear(@PathVariable Integer year) {
         List<ElectricityBill> bills = electricityBillService.fetchAllBillsFromYear(year);
         return ResponseEntity.ok(bills);
     }
 
-    @GetMapping(value = "/get/{from}/{to}", consumes = {"application/json"})
+    @GetMapping(value = "/get/{from}/{to}")
     public ResponseEntity<?> getElectricityBillsBetweenDates(@PathVariable LocalDate from, @PathVariable LocalDate to) {
-        List<ElectricityBill> bills = electricityBillService.fetchBillsByDateBetween(from.toString(), to.toString());
+        List<ElectricityBill> bills = electricityBillService.fetchBillsByDateBetween(from, to);
         return ResponseEntity.ok(bills);
     }
 
