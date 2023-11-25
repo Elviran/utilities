@@ -1,0 +1,19 @@
+
+spring:
+ application.name: @artifactId@
+
+server:
+  port: 19000
+
+spring.data:
+  mongodb:
+    host: localhost
+    port: 27017
+    username: root
+    password: abcedfgh
+    database: utilities
+
+logging:
+  config: classpath:logback-spring.xml
+  file.path: classpath:utilities-api.log
+  pattern.console: '%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n'
